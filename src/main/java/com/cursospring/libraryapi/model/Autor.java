@@ -5,11 +5,12 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.UUID;
 
 @Entity
 @Table(name = "autor", schema = "public")
-@Getter
+@Getter // Get e set criado pelo Lombok
 @Setter
 public class Autor {
 
@@ -26,6 +27,10 @@ public class Autor {
 
     @Column(name = "nacionalidade", length = 50, nullable = false)
     private String nacionalidade;
+
+    // mappedBy - Vai dizer que essa entidade não tem essa coluna
+    @OneToMany(mappedBy = "autor")// 1 autor para muitos livros
+    private List<Livro> livros;
 
 //    @Deprecated
 //    public Autor() {
