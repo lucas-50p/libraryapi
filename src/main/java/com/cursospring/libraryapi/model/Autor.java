@@ -1,6 +1,7 @@
 package com.cursospring.libraryapi.model;
 
 import jakarta.persistence.*;
+import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -74,10 +75,10 @@ public class Autor {
         this.livros = livros;
     }
 
-    //    @Deprecated
-//    public Autor() {
-//        // Para uso do framework
-//    }
+        @Deprecated
+    public Autor() {
+        // Para uso do framework
+    }
 
 
 //    public Autor(UUID id, String nacionalidade, String nome, LocalDate dataNascimento) {
