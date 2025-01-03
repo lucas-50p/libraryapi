@@ -75,13 +75,22 @@ public class Autor {
         this.livros = livros;
     }
 
-        @Deprecated
+    @Deprecated
     public Autor() {
         // Para uso do framework
     }
 
+    @Override
+    public String toString() {
+        return "Autor{" +
+                "id=" + id +
+                ", nome='" + nome + '\'' +
+                ", dataNascimento=" + dataNascimento +
+                ", nacionalidade='" + nacionalidade + '\'' +
+                '}';
+    }
 
-//    public Autor(UUID id, String nacionalidade, String nome, LocalDate dataNascimento) {
+    //    public Autor(UUID id, String nacionalidade, String nome, LocalDate dataNascimento) {
 //        this.id = id;
 //        this.nacionalidade = nacionalidade;
 //        this.nome = nome;
