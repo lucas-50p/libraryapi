@@ -9,7 +9,7 @@ import java.util.UUID;
 
 @Entity
 @Table(name = "livro")
-@Data// Getter e set/ toString / EqualsAndHashCode / RequiredArgsConstructor
+//@Data// Getter e set/ toString / EqualsAndHashCode / RequiredArgsConstructor
 public class Livro {
 
     @Id
@@ -38,4 +38,60 @@ public class Livro {
     @ManyToOne// Muitos Livros para um autor
     @JoinColumn(name = "id_autor")
     private Autor autor;
+
+    public UUID getId() {
+        return id;
+    }
+
+    public void setId(UUID id) {
+        this.id = id;
+    }
+
+    public Autor getAutor() {
+        return autor;
+    }
+
+    public void setAutor(Autor autor) {
+        this.autor = autor;
+    }
+
+    public BigDecimal getPreco() {
+        return preco;
+    }
+
+    public void setPreco(BigDecimal preco) {
+        this.preco = preco;
+    }
+
+    public GeneroLivro getGenero() {
+        return genero;
+    }
+
+    public void setGenero(GeneroLivro genero) {
+        this.genero = genero;
+    }
+
+    public LocalDate getDataPublicacao() {
+        return dataPublicacao;
+    }
+
+    public void setDataPublicacao(LocalDate dataPublicacao) {
+        this.dataPublicacao = dataPublicacao;
+    }
+
+    public String getTitulo() {
+        return titulo;
+    }
+
+    public void setTitulo(String titulo) {
+        this.titulo = titulo;
+    }
+
+    public String getIsbn() {
+        return isbn;
+    }
+
+    public void setIsbn(String isbn) {
+        this.isbn = isbn;
+    }
 }
