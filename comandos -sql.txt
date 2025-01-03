@@ -24,6 +24,9 @@ create table livro (
     )
 );
 
+select l.titulo as nome_livro, a.nome as nome_autor
+FROM livro as l
+join autor as a on a.id = l.id_autor
 
 select * from autor
 select * from livro

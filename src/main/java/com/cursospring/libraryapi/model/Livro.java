@@ -35,7 +35,10 @@ public class Livro {
     private BigDecimal preco;
 
     // Relaciona
-    @ManyToOne// Muitos Livros para um autor
+    // cascade = CascadeType.ALL = Qualquer operção que eu fizer no livro ele vai executar tabela autor junto
+    // Essa operação serve para persistir
+    //@ManyToOne(cascade = CascadeType.ALL)// Muitos Livros para um autor
+    @ManyToOne
     @JoinColumn(name = "id_autor")
     private Autor autor;
 

@@ -39,4 +39,49 @@ class LivroRepositoryTest {
         livro.setAutor(autor);
         livroRepository.save(livro);
     }
+
+    /*
+     * Melhor opção essa manual
+     */
+    @Test
+    void salvarAutorELivroTest(){
+
+        Livro livro = new Livro();
+        livro.setIsbn("90887-84874");
+        livro.setPreco(BigDecimal.valueOf(100));
+        livro.setGenero(GeneroLivro.FICCAO_CIENTIFICA);
+        livro.setTitulo("Harry Potter");
+        livro.setDataPublicacao(LocalDate.of(1980,1,2));
+
+        Autor autor = new Autor();
+        autor.setNome("João");
+        autor.setNacionalidade("Brasileira");
+        autor.setDataNascimento(LocalDate.of(1951,1,31));
+
+        // Salvar o autor
+        autorRepository.save(autor);
+
+        livro.setAutor(autor);
+        livroRepository.save(livro);
+    }
+
+    // Us
+    @Test
+    void salvarCascadeTest(){
+
+        Livro livro = new Livro();
+        livro.setIsbn("90887-84874");
+        livro.setPreco(BigDecimal.valueOf(100));
+        livro.setGenero(GeneroLivro.FICCAO_CIENTIFICA);
+        livro.setTitulo("UFO");
+        livro.setDataPublicacao(LocalDate.of(1980,1,2));
+
+        Autor autor = new Autor();
+        autor.setNome("João");
+        autor.setNacionalidade("Brasileira");
+        autor.setDataNascimento(LocalDate.of(1951,1,31));
+
+        livro.setAutor(autor);
+        livroRepository.save(livro);
+    }
 }
