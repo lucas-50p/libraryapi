@@ -35,6 +35,9 @@ public class Autor {
     @OneToMany(mappedBy = "autor")// 1 autor para muitos livros
     private List<Livro> livros;
 
+//    @OneToMany(mappedBy = "autor", cascade = CascadeType.ALL)
+//    private List<Livro> livros;
+
     public UUID getId() {
         return id;
     }

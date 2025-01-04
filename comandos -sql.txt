@@ -28,5 +28,7 @@ select l.titulo as nome_livro, a.nome as nome_autor
 FROM livro as l
 join autor as a on a.id = l.id_autor
 
+delete FROM livro where id in ('ef99ec80-9542-443d-80d8-41e8afcb5fd1','570d8e83-9744-4fae-8f45-42ba76653391')
+
 select * from autor
 select * from livro
