@@ -97,4 +97,16 @@ public class Livro {
     public void setIsbn(String isbn) {
         this.isbn = isbn;
     }
+
+    @Override
+    public String toString() {
+        return "Livro{" +
+                "id=" + id +
+                ", isbn='" + isbn + '\'' +
+                ", titulo='" + titulo + '\'' +
+                ", dataPublicacao=" + dataPublicacao +
+                ", genero=" + genero +
+                ", preco=" + preco +
+                '}';
+    }
 }

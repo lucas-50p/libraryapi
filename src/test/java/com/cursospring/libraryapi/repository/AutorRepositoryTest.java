@@ -3,6 +3,7 @@ package com.cursospring.libraryapi.repository;
 import com.cursospring.libraryapi.model.Autor;
 import com.cursospring.libraryapi.model.GeneroLivro;
 import com.cursospring.libraryapi.model.Livro;
+import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -110,5 +111,18 @@ public class AutorRepositoryTest {
 
         // Para salvar uma lista
         livroRepository.saveAll(autor.getLivros());
+    }
+
+    @Test
+    //@Transactional
+    void listarLivrosAutor(){
+        var id= UUID.fromString("8bc0137f-a870-40f4-abfd-6ffa39a4a265");
+        var autor = autorRepository.findById(id).get();
+
+        // Buscar os livros do autor
+        List<Livro> livrosLista = livroRepository.findByAutor(autor);
+        autor.setLivros(livrosLista);
+
+        autor.getLivros().forEach(System.out::println);
     }
 }
