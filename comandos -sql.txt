@@ -30,5 +30,7 @@ join autor as a on a.id = l.id_autor
 
 delete FROM livro where id in ('ef99ec80-9542-443d-80d8-41e8afcb5fd1','570d8e83-9744-4fae-8f45-42ba76653391')
 
+select * from livro where id_autor = '8bc0137f-a870-40f4-abfd-6ffa39a4a265';
+
 select * from autor
 select * from livro
