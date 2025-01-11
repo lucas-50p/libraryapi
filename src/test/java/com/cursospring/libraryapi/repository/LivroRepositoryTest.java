@@ -27,11 +27,11 @@ class LivroRepositoryTest {
     @Test
     void salvarTest(){
         Livro livro = new Livro();
-        livro.setIsbn("90887-84874");
+        livro.setIsbn("90887-84876");
         livro.setPreco(BigDecimal.valueOf(100));
-        livro.setGenero(GeneroLivro.FICCAO_CIENTIFICA);
-        livro.setTitulo("UFO");
-        livro.setDataPublicacao(LocalDate.of(1980,1,2));
+        livro.setGenero(GeneroLivro.COMEDIA);
+        livro.setTitulo("Corra que policia vem ai");
+        livro.setDataPublicacao(LocalDate.of(1985,3,2));
 
         // Encontra o id do autor
         Autor autor = autorRepository
@@ -169,4 +169,16 @@ class LivroRepositoryTest {
         resultado.forEach(System.out::println);
     }
 
+    @Test
+    void deletePorGeneroTest(){
+        livroRepository.deleteByGenero(GeneroLivro.COMEDIA);
+    }
+
+    /**
+     * Muda a data de todos os Livros.
+     */
+    @Test
+    void updateDataPublicacao(){
+        livroRepository.updateDataPublicacao(LocalDate.of(2000,1,1));
+    }
 }

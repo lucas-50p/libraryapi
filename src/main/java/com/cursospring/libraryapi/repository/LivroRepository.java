@@ -4,8 +4,10 @@ import com.cursospring.libraryapi.model.Autor;
 import com.cursospring.libraryapi.model.GeneroLivro;
 import com.cursospring.libraryapi.model.Livro;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -83,4 +85,24 @@ public interface LivroRepository extends JpaRepository<Livro, UUID> {
     // Pegar pela posição o parametro - positional parameters não precisa da anotação @param
     @Query("select l from Livro l where l.genero = ?1 order by ?2")
     List<Livro> findByGeneroPositionParameters(GeneroLivro generoLivro, String nomePropiedade);
+
+    /**
+     * Deletar
+     * @param genero
+     */
+    @Modifying
+    @Transactional
+    @Query(" delete from Livro where genero = ?1")
+    void deleteByGenero(GeneroLivro genero);
+
+    /**
+     * Atualizar
+     * @param novaData
+     *
+     * !delete sempre coloque "WHERE"
+     */
+    @Modifying
+    @Transactional
+    @Query(" update Livro set dataPublicacao = ?1")
+    void updateDataPublicacao(LocalDate novaData);
 }
