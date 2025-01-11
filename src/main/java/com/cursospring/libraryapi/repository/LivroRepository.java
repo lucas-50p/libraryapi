@@ -89,6 +89,8 @@ public interface LivroRepository extends JpaRepository<Livro, UUID> {
     /**
      * Deletar
      * @param genero
+     *
+     * !delete sempre coloque "WHERE"
      */
     @Modifying
     @Transactional
@@ -99,7 +101,6 @@ public interface LivroRepository extends JpaRepository<Livro, UUID> {
      * Atualizar
      * @param novaData
      *
-     * !delete sempre coloque "WHERE"
      */
     @Modifying
     @Transactional

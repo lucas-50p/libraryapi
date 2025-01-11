@@ -32,5 +32,8 @@ delete FROM livro where id in ('ef99ec80-9542-443d-80d8-41e8afcb5fd1','570d8e83-
 
 select * from livro where id_autor = '8bc0137f-a870-40f4-abfd-6ffa39a4a265';
 
+# atualizar livro
+update livro set titulo = 'O Dective' where id = 'Colocar Id';
+
 select * from autor
 select * from livro
