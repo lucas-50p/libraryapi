@@ -158,8 +158,15 @@ class LivroRepositoryTest {
     }
 
     @Test
-    void listarGenerosDeLivrosAutoresBrasileirosComQueryJPQL() {
-        var resultado = livroRepository.listarGenerosAutoresBrasileiros();
+    void listarPorGeneroQueryParamTest() {
+        var resultado = livroRepository.findByGenero(GeneroLivro.FICCAO_CIENTIFICA, "dataPublicacao");
         resultado.forEach(System.out::println);
     }
+
+    @Test
+    void listaPorGeneroPorPositionalParamQueryParamTest(){
+        var resultado = livroRepository.findByGeneroPositionParameters(GeneroLivro.FICCAO_CIENTIFICA, "dataPublicacao");
+        resultado.forEach(System.out::println);
+    }
+
 }
