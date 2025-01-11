@@ -27,4 +27,9 @@ public class TransacoesTest {
         // notificar que o livro saiu da livraria
         transacaoService.executar();
     }
+
+    @Test
+    void transacaoEstadoManager(){
+        transacaoService.atualizacaoSemAtualizar();
+    }
 }
