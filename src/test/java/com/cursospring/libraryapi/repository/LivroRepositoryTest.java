@@ -132,7 +132,7 @@ class LivroRepositoryTest {
     }
 
     @Test
-    void pesquisaPorTituloEPrecoTest(){
+    void pesquisaPorTituloEPrecoTest() {
         var preco = BigDecimal.valueOf(75.00);// ValueOf para mais precisão.
 
         List<Livro> lista = livroRepository.findByTituloAndPreco("Harry potter - Calice de Fogo", preco);
@@ -140,10 +140,26 @@ class LivroRepositoryTest {
     }
 
     @Test
-    void pesquisaPorTituloOuIsbnTest(){
-        var isbn = BigDecimal.valueOf(75.00);// ValueOf para mais precisão.
+    void listarLivroComQueryJPQL() {
+        var resultados = livroRepository.listarTodosOrdernadoPorTituloAndPreco();
+        resultados.forEach(System.out::println);
+    }
 
-        List<Livro> lista = livroRepository.findByTituloOrIsbn("Harry potter - Calice de Fogo", preco);
-        lista.forEach(System.out::println);
+    @Test
+    void listarAutoresDosLivroComQueryJPQL() {
+        var resultado = livroRepository.listarAutoresDosLivros();
+        resultado.forEach(System.out::println);
+    }
+
+    @Test
+    void listarTitulosNaoRepetidosComQueryJPQL() {
+        var resultado = livroRepository.listarNomesDiferentesLivros();
+        resultado.forEach(System.out::println);
+    }
+
+    @Test
+    void listarGenerosDeLivrosAutoresBrasileirosComQueryJPQL() {
+        var resultado = livroRepository.listarGenerosAutoresBrasileiros();
+        resultado.forEach(System.out::println);
     }
 }
