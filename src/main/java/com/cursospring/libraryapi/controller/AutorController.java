@@ -3,12 +3,15 @@ package com.cursospring.libraryapi.controller;
 import com.cursospring.libraryapi.controller.dto.AutorDto;
 import com.cursospring.libraryapi.model.Autor;
 import com.cursospring.libraryapi.service.AutorService;
+import jakarta.websocket.server.PathParam;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
+import java.util.Optional;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("autores")
@@ -50,6 +53,25 @@ public class AutorController {
 
         // Novo
         return ResponseEntity.created(location).build();
+    }
+
+    @GetMapping("{id}")
+    public ResponseEntity<AutorDto> obterDetalhes(@PathVariable("id") String id){
+        var idAutor = UUID.fromString(id);
+        Optional<Autor> autorOptional = autorService.obterPorId(idAutor);
+        if(autorOptional.isPresent()){
+
+            // Pegar as informações do autor e passa para o DTO.
+            Autor autor = autorOptional.get();
+            AutorDto autorDto = new AutorDto(
+                    autor.getId(),
+                    autor.getNome(),
+                    autor.getDataNascimento(),
+                    autor.getNacionalidade());
+            return ResponseEntity.ok(autorDto);
+        }
+        // 404
+        return ResponseEntity.notFound().build();
     }
 
 }

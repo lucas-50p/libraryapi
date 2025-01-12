@@ -3,6 +3,7 @@ package com.cursospring.libraryapi.controller.dto;
 import com.cursospring.libraryapi.model.Autor;
 
 import java.time.LocalDate;
+import java.util.UUID;
 
 /**
  * DTO - Data transfer object : transferencias de dados
@@ -14,6 +15,7 @@ import java.time.LocalDate;
 //  Record só tem get class imutavel.
 // Representacao do contrato
 public record AutorDto(
+        UUID id,
         String nome,
         LocalDate dataNascimento,
         String nacionalidade) {
