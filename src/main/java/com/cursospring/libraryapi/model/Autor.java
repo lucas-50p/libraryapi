@@ -5,13 +5,19 @@ import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import org.springframework.data.annotation.CreatedBy;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
 @Entity
 @Table(name = "autor", schema = "public")
+@EntityListeners(AuditingEntityListener.class)// Observa se tem essa anotações @CreatedBy @LastModifiedDate/Escuta a operação toda vez que fizer nessa entidade
 //@Getter
 //@Setter
 //@ToString
@@ -34,6 +40,17 @@ public class Autor {
     // mappedBy - Vai dizer que essa entidade não tem essa coluna
     @OneToMany(mappedBy = "autor")// 1 autor para muitos livros
     private List<Livro> livros;
+
+    @CreatedDate// Cria automaticamente as datas
+    @Column(name = "data_cadastro")
+    private LocalDateTime dataCadastro;
+
+    @LastModifiedDate
+    @Column(name = "data_atualizacao")
+    private LocalDateTime dataAtualizacao;
+
+    @Column(name = "id_usuario")
+    private UUID idUsuario;
 
 //    @OneToMany(mappedBy = "autor", cascade = CascadeType.ALL)
 //    private List<Livro> livros;
@@ -76,6 +93,30 @@ public class Autor {
 
     public void setLivros(List<Livro> livros) {
         this.livros = livros;
+    }
+
+    public LocalDateTime getDataCadastro() {
+        return dataCadastro;
+    }
+
+    public void setDataCadastro(LocalDateTime dataCadastro) {
+        this.dataCadastro = dataCadastro;
+    }
+
+    public LocalDateTime getDataAtualizacao() {
+        return dataAtualizacao;
+    }
+
+    public void setDataAtualizacao(LocalDateTime dataAtualizacao) {
+        this.dataAtualizacao = dataAtualizacao;
+    }
+
+    public UUID getIdUsuario() {
+        return idUsuario;
+    }
+
+    public void setIdUsuario(UUID idUsuario) {
+        this.idUsuario = idUsuario;
     }
 
     @Deprecated
