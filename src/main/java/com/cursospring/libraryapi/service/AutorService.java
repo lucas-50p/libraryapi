@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import java.util.Optional;
 import java.util.UUID;
 
+// Camada de dominio da aplicação
 @Service
 public class AutorService {
 
@@ -22,5 +23,9 @@ public class AutorService {
 
     public Optional<Autor> obterPorId(UUID id) {
         return autorRepository.findById(id);
+    }
+
+    public void deletar(Autor autor){
+        autorRepository.delete(autor);
     }
 }
