@@ -1,0 +1,176 @@
+https://whimsical.com/cadastro-de-autor-8jTJxcmJu3pFjKhDp35msT
+
+Cadastro de Autor
+
+⁠ 
+Descrição
+
+Deseja-se cadastrar os autores de livros, bem como realizar suas atualizações, consultas e permitir sua exclusão.
+Atores
+
+Somente o Gerente pode cadastrar, atualizar e remover Autores.
+
+O usuário Operador poderá somente consultar os dados dos Autores.
+Campos solicitados pelo Negócio
+
+Dados que deverão ser guardados:
+
+Nome *
+Data de Nascimento *
+
+    Nacionalidade *
+
+⁠ 
+
+campos com (*) são obrigatórios
+Campos Lógicos
+
+Dados não solicitados pela equipe de negócio, mas são de controle da aplicação e auditoria:
+
+ID - UUID
+Data Cadastro
+Data Ultima Atualização
+
+    Usuário Ultima Atualização
+
+Regras de Negócio
+
+Não permitir cadastrar um Autor com mesmo Nome, Data de Nascimento e Nacionalidade, ou seja, se houver 2 autores com mesmos Nome, Data de Nascimento e Nacionalidade serão considerados repetidos, não permitir.
+
+    Não permitir excluir um Autor que possuir algum livro.
+
+Contrato API
+Cadastrar novo Autor
+- Requisição
+URI: /autores
+Método: POST
+Body:
+{
+  "nome": "string",
+  "dataNascimento": "date",
+  "nacionalidade": "string;
+}
+⁠ 
+- Resposta
+1. Sucesso
+⁠ 
+Código: 201 - Created
+Header: Location - URI do recurso criado
+⁠ 
+2. Erro de Validação
+⁠ 
+Código: 422 - Unprocessable Entity
+Body:
+{
+   "status": 422,
+   "message": "Erro de Validação",
+   "errors: [
+      { "field": "nome", "error": "Nome é obrigatório" }
+    ]
+}
+⁠ 
+3. Autor Duplicado
+⁠ 
+Código: 409 - Conflict
+Body:
+{
+   "status": 409,
+   "message": "Registro Duplicado",
+   "errors: []
+}
+Visualizar Detalhes do Autor
+- Requisição
+URI: /autores/{ID}
+Método: GET
+⁠ 
+⁠ 
+- Respostas
+1. Sucesso
+⁠ 
+Código: 200 - OK
+Body:
+{
+  "id": "uuid",
+  "nome": "string",
+  "dataNascimento": "date",
+  "nacionalidade": "string;
+}
+⁠ 
+2. Erro
+⁠ 
+Código: 404 - Not Found
+Excluir  Autor
+- Requisição
+URI: /autores/{ID}
+Método: DELETE
+⁠ 
+- Respostas
+1. Sucesso
+⁠ 
+Código: 204 - No Content
+⁠ 
+2. Erro
+⁠ 
+Código: 400 - Bad Request
+⁠ 
+Body:
+{
+   "status": 400,
+   "message": "Erro na exclusão: registro está sendo utilizado.",
+   "errors: []
+}
+Pesquisar Autores
+- Requisição
+⁠ 
+URI: /autores
+Query Params: nome, nacionalidade
+⁠ 
+Método: GET
+- Respostas
+1. Sucesso
+⁠ 
+Código: 200 - OK
+Body:
+[{
+  "id": "uuid",
+  "nome": "string",
+  "dataNascimento": "date",
+  "nacionalidade": "string;
+}]
+Atualizar Autor
+- Requisição
+URI: /autores/{ID}
+Método: PUT
+Body:
+{
+  "nome": "string",
+  "dataNascimento": "date",
+  "nacionalidade": "string;
+}
+⁠ 
+- Resposta
+1. Sucesso
+⁠ 
+Código: 204 - No Content
+⁠ 
+2. Erro de Validação
+⁠ 
+Código: 422 - Unprocessable Entity
+Body:
+{
+   "status": 422,
+   "message": "Erro de Validação",
+   "errors: [
+      { "field": "nome", "error": "Nome é obrigatório" }
+    ]
+}
+⁠ 
+3. Autor Duplicado
+⁠ 
+Código: 409 - Conflict
+Body:
+{
+   "status": 409,
+   "message": "Registro Duplicado",
+   "errors: []
+}
