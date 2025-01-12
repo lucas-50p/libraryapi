@@ -10,8 +10,10 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("autores")
@@ -88,5 +90,30 @@ public class AutorController {
         // Deletado
         autorService.deletar(autorOptional.get());
         return ResponseEntity.noContent().build();
+    }
+
+    /**
+     * RequestParam - Parametro da requisão
+     * Required = false ; campo não obrigatorio
+     * se fosse obrigatorio não precisa colocar o value
+     */
+    @GetMapping("/pesquisar")// não posso dois mapeamentos GET sejam repetidos
+    public ResponseEntity<List<AutorDto>> pesquisar(
+            @RequestParam(value = "nome", required = false) String nome,
+            @RequestParam(value = "nacionalidade", required = false) String nacionalidade){
+
+        // Lista de autor
+        List<Autor> resultado = autorService.pesquisa(nome, nacionalidade);
+
+        // Transforma lista para DTO
+        List<AutorDto> lista = resultado
+                .stream()
+                .map(autor -> new AutorDto(
+                        autor.getId(),
+                        autor.getNome(),
+                        autor.getDataNascimento(),
+                        autor.getNacionalidade())
+                ).collect(Collectors.toList());
+        return ResponseEntity.ok(lista);
     }
 }

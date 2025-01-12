@@ -13,7 +13,8 @@ import java.util.UUID;
  */
 
 //  Record só tem get class imutavel.
-// Representacao do contrato
+// Representacao do contrato.
+// Camadada Represatacional.
 public record AutorDto(
         UUID id,
         String nome,
