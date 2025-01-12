@@ -1,5 +1,7 @@
 package com.cursospring.libraryapi.controller.dto;
 
+import com.cursospring.libraryapi.model.Autor;
+
 import java.time.LocalDate;
 
 /**
@@ -9,12 +11,18 @@ import java.time.LocalDate;
  * mas não faz parte das outras camadas.
  */
 
+//  Record só tem get class imutavel.
 // Representacao do contrato
 public record AutorDto(
         String nome,
-        LocalDate datanascimento,
+        LocalDate dataNascimento,
         String nacionalidade) {
 
-
-
+    public Autor maperParaAutor(){
+        Autor autor = new Autor();
+        autor.setNome(this.nome);
+        autor.setDataNascimento(this.dataNascimento);
+        autor.setNacionalidade(this.nacionalidade);
+        return autor;
+    }
 }
