@@ -1,6 +1,8 @@
 package com.cursospring.libraryapi.controller;
 
 import com.cursospring.libraryapi.controller.dto.AutorDto;
+import com.cursospring.libraryapi.controller.dto.ErrorResposta;
+import com.cursospring.libraryapi.exceptions.RegistroDuplicadoException;
 import com.cursospring.libraryapi.model.Autor;
 import com.cursospring.libraryapi.service.AutorService;
 import jakarta.websocket.server.PathParam;
@@ -11,6 +13,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -37,7 +40,9 @@ public class AutorController {
      */
     @PostMapping// Atalho, não precisar colocar ação salvar
     // @RequestMapping(method = RequestMethod.POST)// Antigo
-    public ResponseEntity<Void> salvar(@RequestBody AutorDto autorDto){
+    public ResponseEntity<Object> salvar(@RequestBody AutorDto autorDto){
+
+        try {
 
         Autor autorEntidade = autorDto.maperParaAutor();
         autorService.salvar(autorEntidade);
@@ -55,6 +60,11 @@ public class AutorController {
 
         // Novo
         return ResponseEntity.created(location).build();
+
+        } catch (RegistroDuplicadoException e) {
+            var erroDTO = ErrorResposta.conflito(e.getMessage());
+            return  ResponseEntity.status(erroDTO.status()).body(erroDTO);
+        }
     }
 
     @GetMapping("{id}")

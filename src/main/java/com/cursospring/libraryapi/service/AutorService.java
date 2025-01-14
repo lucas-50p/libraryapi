@@ -2,6 +2,7 @@ package com.cursospring.libraryapi.service;
 
 import com.cursospring.libraryapi.model.Autor;
 import com.cursospring.libraryapi.repository.AutorRepository;
+import com.cursospring.libraryapi.validador.AutorValidator;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -13,12 +14,17 @@ import java.util.UUID;
 public class AutorService {
 
     private final AutorRepository autorRepository;
+    private final AutorValidator autorValidator;
 
-    public AutorService(AutorRepository autorRepository){
+    public AutorService(AutorRepository autorRepository, AutorValidator autorValidator){
         this.autorRepository = autorRepository;
+        this.autorValidator = autorValidator;
     }
 
     public Autor salvar(Autor autor){
+
+        // Validar
+        autorValidator.validar(autor);
         return autorRepository.save(autor);
     }
 
@@ -27,6 +33,8 @@ public class AutorService {
         if(autor.getId() == null){
             throw new IllegalArgumentException("Para atualizar, é necessário que o autor já esteja na base!");
         }
+        // Validar
+        autorValidator.validar(autor);
         autorRepository.save(autor);
     }
 
