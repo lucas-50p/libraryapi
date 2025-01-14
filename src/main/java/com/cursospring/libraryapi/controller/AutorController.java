@@ -2,6 +2,7 @@ package com.cursospring.libraryapi.controller;
 
 import com.cursospring.libraryapi.controller.dto.AutorDto;
 import com.cursospring.libraryapi.controller.dto.ErrorResposta;
+import com.cursospring.libraryapi.exceptions.OperacaoNaoPermitidaException;
 import com.cursospring.libraryapi.exceptions.RegistroDuplicadoException;
 import com.cursospring.libraryapi.model.Autor;
 import com.cursospring.libraryapi.service.AutorService;
@@ -88,7 +89,9 @@ public class AutorController {
 
     // Indompotente
     @DeleteMapping("{id}")
-    public ResponseEntity<Void> deletar(@PathVariable("id") String id){
+    public ResponseEntity<Object> deletar(@PathVariable("id") String id){
+
+        try {
         var idAutor = UUID.fromString(id);
         Optional<Autor> autorOptional = autorService.obterPorId(idAutor);
 
@@ -100,6 +103,10 @@ public class AutorController {
         // Deletado
         autorService.deletar(autorOptional.get());
         return ResponseEntity.noContent().build();
+        } catch (OperacaoNaoPermitidaException e) {
+            var erroResposta = ErrorResposta.respostaPadrao(e.getMessage());
+            return  ResponseEntity.status(erroResposta.status()).body(erroResposta);
+        }
     }
 
     /**
@@ -128,7 +135,9 @@ public class AutorController {
     }
 
     @PutMapping("{id}")
-    public  ResponseEntity<Void> atualizar(@PathVariable("id") String id, @RequestBody AutorDto autorDto){
+    public  ResponseEntity<Object> atualizar(@PathVariable("id") String id, @RequestBody AutorDto autorDto){
+
+        try{
 
         var idAutor = UUID.fromString(id);
         Optional<Autor> autorOptional = autorService.obterPorId(idAutor);
@@ -144,5 +153,10 @@ public class AutorController {
 
         autorService.atualizar(autor);
         return ResponseEntity.noContent().build();
+
+        } catch (RegistroDuplicadoException e){
+            var erroDTO = ErrorResposta.conflito(e.getMessage());
+            return  ResponseEntity.status(erroDTO.status()).body(erroDTO);
+        }
     }
 }
