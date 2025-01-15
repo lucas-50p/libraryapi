@@ -1,8 +1,7 @@
 package com.cursospring.libraryapi.controller.dto;
 
 import com.cursospring.libraryapi.model.Autor;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.*;
 
 import java.time.LocalDate;
 import java.util.UUID;
@@ -21,12 +20,16 @@ public record AutorDto(
         UUID id,
 
         @NotBlank(message = "Campo obrigatorio")// String não venha nula e nem vazia
+        @Size(min = 2, max = 100, message = "Campo fora fo tamanho padrão *") //Seguir como está no banoc
         String nome,
 
-        @NotNull(message = "Campo obrigatorio")
+        @NotNull(message = "Campo obrigatorio *")
+        //@Future// Data futura
+        @Past // Data passada
         LocalDate dataNascimento,
 
-        @NotBlank(message = "Campo obrigatorio")
+        @NotBlank(message = "* Campo obrigatorio *")
+        @Size(min = 2, max = 50, message = "Campo fora fo tamanho padrão *")
         String nacionalidade) {
 
     public Autor maperParaAutor(){

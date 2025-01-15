@@ -138,7 +138,7 @@ public class AutorController {
     }
 
     @PutMapping("{id}")
-    public  ResponseEntity<Object> atualizar(@PathVariable("id") String id, @RequestBody AutorDto autorDto){
+    public  ResponseEntity<Object> atualizar(@PathVariable("id") String id, @RequestBody @Valid AutorDto autorDto){
 
         try{
 
