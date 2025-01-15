@@ -1,6 +1,8 @@
 package com.cursospring.libraryapi.controller.dto;
 
 import com.cursospring.libraryapi.model.Autor;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 
 import java.time.LocalDate;
 import java.util.UUID;
@@ -17,8 +19,14 @@ import java.util.UUID;
 // Camadada Represatacional.
 public record AutorDto(
         UUID id,
+
+        @NotBlank(message = "Campo obrigatorio")// String não venha nula e nem vazia
         String nome,
+
+        @NotNull(message = "Campo obrigatorio")
         LocalDate dataNascimento,
+
+        @NotBlank(message = "Campo obrigatorio")
         String nacionalidade) {
 
     public Autor maperParaAutor(){

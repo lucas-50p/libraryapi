@@ -6,6 +6,7 @@ import com.cursospring.libraryapi.exceptions.OperacaoNaoPermitidaException;
 import com.cursospring.libraryapi.exceptions.RegistroDuplicadoException;
 import com.cursospring.libraryapi.model.Autor;
 import com.cursospring.libraryapi.service.AutorService;
+import jakarta.validation.Valid;
 import jakarta.websocket.server.PathParam;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -37,11 +38,13 @@ public class AutorController {
      *
      * ResponseEntity - server para representar uma resposta.
      * RequestBody - server para indicar que parâmetro vai receber um obj JSON.
+     *
+     * @Valid vai validar os campos
      * @return
      */
     @PostMapping// Atalho, não precisar colocar ação salvar
     // @RequestMapping(method = RequestMethod.POST)// Antigo
-    public ResponseEntity<Object> salvar(@RequestBody AutorDto autorDto){
+    public ResponseEntity<Object> salvar(@RequestBody @Valid AutorDto autorDto){
 
         try {
 
