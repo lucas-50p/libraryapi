@@ -117,13 +117,14 @@ public class AutorController {
      * Required = false ; campo não obrigatorio
      * se fosse obrigatorio não precisa colocar o value
      */
-    @GetMapping("/pesquisar")// não posso dois mapeamentos GET sejam repetidos
+    //@GetMapping("/pesquisar")// não posso dois mapeamentos GET sejam repetidos
+    @GetMapping
     public ResponseEntity<List<AutorDto>> pesquisar(
             @RequestParam(value = "nome", required = false) String nome,
             @RequestParam(value = "nacionalidade", required = false) String nacionalidade){
-
+        System.out.println("Nome: " + nome + " Nacionalidade: " + nacionalidade);
         // Lista de autor
-        List<Autor> resultado = autorService.pesquisa(nome, nacionalidade);
+        List<Autor> resultado = autorService.pesquisaByExample(nome, nacionalidade);
 
         // Transforma lista para DTO
         List<AutorDto> lista = resultado
@@ -138,11 +139,13 @@ public class AutorController {
     }
 
     @PutMapping("{id}")
-    public  ResponseEntity<Object> atualizar(@PathVariable("id") String id, @RequestBody @Valid AutorDto autorDto){
+    public  ResponseEntity<Object> atualizar
+            (@PathVariable("id") String id, @RequestBody @Valid AutorDto autorDto){
 
         try{
 
         var idAutor = UUID.fromString(id);
+
         Optional<Autor> autorOptional = autorService.obterPorId(idAutor);
 
         if(autorOptional.isEmpty()){

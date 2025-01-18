@@ -119,10 +119,10 @@ public class Autor {
         this.idUsuario = idUsuario;
     }
 
-    @Deprecated
-    public Autor() {
-        // Para uso do framework
-    }
+//    @Deprecated
+//    public Autor() {
+//        // Para uso do framework
+//    }
 
     @Override
     public String toString() {

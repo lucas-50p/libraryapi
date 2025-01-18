@@ -33,17 +33,35 @@ public class AutorValidator {
 
     private boolean existeAutorCadastrado(Autor autor) {
 
-        // Fui no banco busquei autor
+//        // Fui no banco busquei autor
+//        Optional<Autor> autorEncontrado = autorRepository.findByNomeAndDataNascimentoAndNacionalidade(
+//                autor.getNome(), autor.getDataNascimento(), autor.getNacionalidade()
+//        );
+//
+//        // Verificar se é novo autor
+//        if(autor.getId() == null){
+//            return  autorEncontrado.isPresent();
+//        }
+//
+//        // Não possui o mesmo ID
+//        return !autor.getId().equals(autorEncontrado.get().getId()) && autorEncontrado.isPresent();
+
+        // Buscando autor no banco
         Optional<Autor> autorEncontrado = autorRepository.findByNomeAndDataNascimentoAndNacionalidade(
                 autor.getNome(), autor.getDataNascimento(), autor.getNacionalidade()
         );
 
-        // Verificar se é novo autor
-        if(autor.getId() == null){
-            return  autorEncontrado.isPresent();
+        // Se não encontrar nenhum autor com os mesmos dados, não existe um autor cadastrado
+        if (autorEncontrado.isEmpty()) {
+            return false;
         }
 
-        // Não possui o mesmo ID
-        return !autor.getId().equals(autorEncontrado.get().getId()) && autorEncontrado.isPresent();
+        // Se o autor não tem id (ou seja, é um novo autor), verifica se existe algum autor já cadastrado
+        if (autor.getId() == null) {
+            return true;  // Existe um autor com os mesmos dados, logo, não pode ser cadastrado
+        }
+
+        // Se o autor tem id, e o id encontrado não é o mesmo do autor atual, significa que já existe um autor com esses dados
+        return !autor.getId().equals(autorEncontrado.get().getId());
     }
 }

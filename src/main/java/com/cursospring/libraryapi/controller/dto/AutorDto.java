@@ -1,6 +1,7 @@
 package com.cursospring.libraryapi.controller.dto;
 
 import com.cursospring.libraryapi.model.Autor;
+import jakarta.persistence.Id;
 import jakarta.validation.constraints.*;
 
 import java.time.LocalDate;
@@ -17,6 +18,8 @@ import java.util.UUID;
 // Representacao do contrato.
 // Camadada Represatacional.
 public record AutorDto(
+
+        @Id
         UUID id,
 
         @NotBlank(message = "Campo obrigatorio")// String não venha nula e nem vazia

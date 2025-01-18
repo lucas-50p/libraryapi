@@ -5,6 +5,8 @@ import com.cursospring.libraryapi.model.Autor;
 import com.cursospring.libraryapi.repository.AutorRepository;
 import com.cursospring.libraryapi.repository.LivroRepository;
 import com.cursospring.libraryapi.validador.AutorValidator;
+import org.springframework.data.domain.Example;
+import org.springframework.data.domain.ExampleMatcher;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -78,5 +80,38 @@ public class AutorService {
         }
 
         return autorRepository.findAll();
+    }
+
+//    public List<Autor> pesquisaByExample(String nome, String nacionalidade) {
+//        var autor = new Autor();
+//        if (nome != null) autor.setNome(nome);
+//        if (nacionalidade != null) autor.setNacionalidade(nacionalidade);
+////        autor.setNome(nome);
+////        autor.setNacionalidade(nacionalidade);
+//
+//        ExampleMatcher matcher = ExampleMatcher
+//                .matching()
+//                .withIgnoreCase()// Ignorar maiúsculas/minúsculas
+//                .withStringMatcher(ExampleMatcher.StringMatcher.CONTAINING)// Correspondência parcial
+//                .withExcludeNullValue(); // Incluir valores nulos na busca
+//        Example<Autor> autorExample = Example.of(autor, matcher);
+//        return autorRepository.findAll(autorExample);
+//    }
+
+    public List<Autor> pesquisaByExample(String nome, String nacionalidade) {
+        var autor = new Autor();
+
+        // Verifique se o nome ou nacionalidade não são nulos antes de definir
+        if (nome != null) autor.setNome(nome);
+        if (nacionalidade != null) autor.setNacionalidade(nacionalidade);
+
+        // Ajuste do ExampleMatcher
+        ExampleMatcher matcher = ExampleMatcher
+                .matching()
+                .withIgnoreCase() // Ignorar maiúsculas/minúsculas
+                .withStringMatcher(ExampleMatcher.StringMatcher.CONTAINING); // Correspondência parcial
+
+        Example<Autor> autorExample = Example.of(autor, matcher);
+        return autorRepository.findAll(autorExample);
     }
 }
