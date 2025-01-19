@@ -82,22 +82,6 @@ public class AutorService {
         return autorRepository.findAll();
     }
 
-//    public List<Autor> pesquisaByExample(String nome, String nacionalidade) {
-//        var autor = new Autor();
-//        if (nome != null) autor.setNome(nome);
-//        if (nacionalidade != null) autor.setNacionalidade(nacionalidade);
-////        autor.setNome(nome);
-////        autor.setNacionalidade(nacionalidade);
-//
-//        ExampleMatcher matcher = ExampleMatcher
-//                .matching()
-//                .withIgnoreCase()// Ignorar maiúsculas/minúsculas
-//                .withStringMatcher(ExampleMatcher.StringMatcher.CONTAINING)// Correspondência parcial
-//                .withExcludeNullValue(); // Incluir valores nulos na busca
-//        Example<Autor> autorExample = Example.of(autor, matcher);
-//        return autorRepository.findAll(autorExample);
-//    }
-
     public List<Autor> pesquisaByExample(String nome, String nacionalidade) {
         var autor = new Autor();
 

@@ -2,13 +2,18 @@ package com.cursospring.libraryapi.model;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Entity
 @Table(name = "livro")
+@EntityListeners(AuditingEntityListener.class)// Observa se tem essa anotações @CreatedBy @LastModifiedDate/Escuta a operação toda vez que fizer nessa entidade
 //@Data// Getter e set/ toString / EqualsAndHashCode / RequiredArgsConstructor
 public class Livro {
 
@@ -41,6 +46,17 @@ public class Livro {
     @ManyToOne
     @JoinColumn(name = "id_autor")
     private Autor autor;
+
+    @CreatedDate// Cria automaticamente as datas
+    @Column(name = "data_cadastro")
+    private LocalDateTime dataCadastro;
+
+    @LastModifiedDate
+    @Column(name = "data_atualizacao")
+    private LocalDateTime dataAtualizacao;
+
+    @Column(name = "id_usuario")
+    private UUID idUsuario;
 
     public UUID getId() {
         return id;
@@ -96,6 +112,30 @@ public class Livro {
 
     public void setIsbn(String isbn) {
         this.isbn = isbn;
+    }
+
+    public LocalDateTime getDataCadastro() {
+        return dataCadastro;
+    }
+
+    public void setDataCadastro(LocalDateTime dataCadastro) {
+        this.dataCadastro = dataCadastro;
+    }
+
+    public UUID getIdUsuario() {
+        return idUsuario;
+    }
+
+    public void setIdUsuario(UUID idUsuario) {
+        this.idUsuario = idUsuario;
+    }
+
+    public LocalDateTime getDataAtualizacao() {
+        return dataAtualizacao;
+    }
+
+    public void setDataAtualizacao(LocalDateTime dataAtualizacao) {
+        this.dataAtualizacao = dataAtualizacao;
     }
 
     @Override
