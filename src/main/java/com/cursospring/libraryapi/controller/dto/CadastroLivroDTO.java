@@ -7,6 +7,7 @@ import jakarta.validation.constraints.Past;
 import org.hibernate.validator.constraints.ISBN;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.UUID;
 
 public record CadastroLivroDTO(
@@ -20,8 +21,10 @@ public record CadastroLivroDTO(
 
         @NotNull(message = "campo obrigatorio")
         @Past(message = "nao pode ser uma data futura")
-        String dataPublicacao,
+        LocalDate dataPublicacao,
+
         GeneroLivro genero,
+
         BigDecimal preco,
 
         @NotNull(message = "campo obrigatorio")

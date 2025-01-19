@@ -3,13 +3,14 @@ package com.cursospring.libraryapi.controller.dto;
 import com.cursospring.libraryapi.model.GeneroLivro;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.UUID;
 
 public record ResultadoPesquisaLivroDTO(
         UUID id,
         String isbn,
         String titulo,
-        String dataPublicacao,
+        LocalDate dataPublicacao,
         GeneroLivro genero,
         BigDecimal preco,
         AutorDto autorDto
