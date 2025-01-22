@@ -2,6 +2,7 @@ package com.cursospring.libraryapi.controller;
 
 import com.cursospring.libraryapi.controller.dto.AutorDto;
 import com.cursospring.libraryapi.controller.dto.ErrorResposta;
+import com.cursospring.libraryapi.controller.mappers.AutorMapper;
 import com.cursospring.libraryapi.exceptions.OperacaoNaoPermitidaException;
 import com.cursospring.libraryapi.exceptions.RegistroDuplicadoException;
 import com.cursospring.libraryapi.model.Autor;
@@ -26,11 +27,13 @@ import java.util.stream.Collectors;
 public class AutorController {
 
     private final AutorService autorService;
+    private final AutorMapper autorMapper;
 
     // !!! Para testa na class application.
 
-    public AutorController(AutorService autorService){
+    public AutorController(AutorService autorService, AutorMapper autorMapper){
         this.autorService = autorService;
+        this.autorMapper = autorMapper;
     }
 
     /**
@@ -48,15 +51,15 @@ public class AutorController {
 
         try {
 
-        Autor autorEntidade = autorDto.maperParaAutor();
-        autorService.salvar(autorEntidade);
+        Autor autor = autorMapper.toEntity(autorDto);
+        autorService.salvar(autor);
 
         // URL localizado onde foi creado.
         // http://localhost:8080/autores/id
         URI location = ServletUriComponentsBuilder
                 .fromCurrentRequest()// Vai pegar essa requisição autal URL
                 .path("/{id}")// "/" precisa do barra para separar url
-                .buildAndExpand(autorEntidade.getId())// Parametro
+                .buildAndExpand(autor.getId())// Parametro
                 .toUri();// Vai transformar obj em URI
 
         // Antigo
@@ -74,20 +77,13 @@ public class AutorController {
     @GetMapping("{id}")
     public ResponseEntity<AutorDto> obterDetalhes(@PathVariable("id") String id){
         var idAutor = UUID.fromString(id);
-        Optional<Autor> autorOptional = autorService.obterPorId(idAutor);
-        if(autorOptional.isPresent()){
 
-            // Pegar as informações do autor e passa para o DTO.
-            Autor autor = autorOptional.get();
-            AutorDto autorDto = new AutorDto(
-                    autor.getId(),
-                    autor.getNome(),
-                    autor.getDataNascimento(),
-                    autor.getNacionalidade());
-            return ResponseEntity.ok(autorDto);
-        }
-        // 404
-        return ResponseEntity.notFound().build();
+        return autorService
+                .obterPorId(idAutor)
+                .map(autor -> {
+                        AutorDto autorDto = autorMapper.toDTO(autor);
+                        return ResponseEntity.ok(autorDto);
+                }).orElseGet( () -> ResponseEntity.notFound().build());
     }
 
     // Indompotente
@@ -129,12 +125,8 @@ public class AutorController {
         // Transforma lista para DTO
         List<AutorDto> lista = resultado
                 .stream()
-                .map(autor -> new AutorDto(
-                        autor.getId(),
-                        autor.getNome(),
-                        autor.getDataNascimento(),
-                        autor.getNacionalidade())
-                ).collect(Collectors.toList());
+                .map(autorMapper::toDTO)
+                .collect(Collectors.toList());
         return ResponseEntity.ok(lista);
     }
 
