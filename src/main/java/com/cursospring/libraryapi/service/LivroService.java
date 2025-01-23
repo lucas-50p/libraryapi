@@ -3,6 +3,7 @@ package com.cursospring.libraryapi.service;
 import com.cursospring.libraryapi.controller.dto.CadastroLivroDTO;
 import com.cursospring.libraryapi.controller.dto.ErrorResposta;
 import com.cursospring.libraryapi.exceptions.RegistroDuplicadoException;
+import com.cursospring.libraryapi.model.Livro;
 import com.cursospring.libraryapi.repository.LivroRepository;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -20,5 +21,9 @@ public class LivroService {
 
     public LivroService(LivroRepository livroRepository) {
         this.livroRepository = livroRepository;
+    }
+
+    public Livro salvar(Livro livro) {
+        return  livroRepository.save(livro);
     }
 }
