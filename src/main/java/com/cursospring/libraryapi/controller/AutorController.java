@@ -47,19 +47,11 @@ public class AutorController implements GenericController{
      */
     @PostMapping// Atalho, não precisar colocar ação salvar
     // @RequestMapping(method = RequestMethod.POST)// Antigo
-    public ResponseEntity<Object> salvar(@RequestBody @Valid AutorDto autorDto){
-
-        try {
-
+    public ResponseEntity<Void> salvar(@RequestBody @Valid AutorDto autorDto){
         Autor autor = autorMapper.toEntity(autorDto);
         autorService.salvar(autor);
         URI location = gerarheaderLocation(autor.getId());
         return ResponseEntity.created(location).build();
-
-        } catch (RegistroDuplicadoException e) {
-            var erroDTO = ErrorResposta.conflito(e.getMessage());
-            return  ResponseEntity.status(erroDTO.status()).body(erroDTO);
-        }
     }
 
     @GetMapping("{id}")
@@ -76,9 +68,7 @@ public class AutorController implements GenericController{
 
     // Indompotente
     @DeleteMapping("{id}")
-    public ResponseEntity<Object> deletar(@PathVariable("id") String id){
-
-        try {
+    public ResponseEntity<Void> deletar(@PathVariable("id") String id){
         var idAutor = UUID.fromString(id);
         Optional<Autor> autorOptional = autorService.obterPorId(idAutor);
 
@@ -90,10 +80,6 @@ public class AutorController implements GenericController{
         // Deletado
         autorService.deletar(autorOptional.get());
         return ResponseEntity.noContent().build();
-        } catch (OperacaoNaoPermitidaException e) {
-            var erroResposta = ErrorResposta.respostaPadrao(e.getMessage());
-            return  ResponseEntity.status(erroResposta.status()).body(erroResposta);
-        }
     }
 
     /**
@@ -119,11 +105,8 @@ public class AutorController implements GenericController{
     }
 
     @PutMapping("{id}")
-    public  ResponseEntity<Object> atualizar
+    public  ResponseEntity<Void> atualizar
             (@PathVariable("id") String id, @RequestBody @Valid AutorDto autorDto){
-
-        try{
-
         var idAutor = UUID.fromString(id);
 
         Optional<Autor> autorOptional = autorService.obterPorId(idAutor);
@@ -139,10 +122,5 @@ public class AutorController implements GenericController{
 
         autorService.atualizar(autor);
         return ResponseEntity.noContent().build();
-
-        } catch (RegistroDuplicadoException e){
-            var erroDTO = ErrorResposta.conflito(e.getMessage());
-            return  ResponseEntity.status(erroDTO.status()).body(erroDTO);
-        }
     }
 }

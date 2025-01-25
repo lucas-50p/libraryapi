@@ -2,6 +2,8 @@ package com.cursospring.libraryapi.controller.common;
 
 import com.cursospring.libraryapi.controller.dto.ErrorCampo;
 import com.cursospring.libraryapi.controller.dto.ErrorResposta;
+import com.cursospring.libraryapi.exceptions.OperacaoNaoPermitidaException;
+import com.cursospring.libraryapi.exceptions.RegistroDuplicadoException;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -9,6 +11,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+import javax.management.OperationsException;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -28,5 +31,27 @@ public class GlobalExceptionHandler {
                 "Erro de validação",
                 listaErros
         );
+    }
+
+    @ExceptionHandler(RegistroDuplicadoException.class)
+    @ResponseStatus(HttpStatus.CONFLICT)
+    public ErrorResposta handleRegistroDuplicadoException(RegistroDuplicadoException e){
+        return ErrorResposta.conflito(e.getMessage());
+    }
+
+    @ExceptionHandler(OperacaoNaoPermitidaException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ErrorResposta handleOperacaoNaoPermitidaException(OperacaoNaoPermitidaException e){
+        return ErrorResposta.respostaPadrao(e.getMessage());
+    }
+
+    @ExceptionHandler(RuntimeException.class)
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    public ErrorResposta handleErrosNaoTratados(RuntimeException e){
+        return new ErrorResposta(
+              HttpStatus.INTERNAL_SERVER_ERROR.value(),
+              "Ocorreu um erro inseperado. Contado Adm",
+              List.of());
+
     }
 }
