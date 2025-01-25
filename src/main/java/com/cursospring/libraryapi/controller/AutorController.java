@@ -24,7 +24,7 @@ import java.util.stream.Collectors;
 @RestController
 @RequestMapping("autores")
 // http://localhost:8080/autores
-public class AutorController {
+public class AutorController implements GenericController{
 
     private final AutorService autorService;
     private final AutorMapper autorMapper;
@@ -53,19 +53,7 @@ public class AutorController {
 
         Autor autor = autorMapper.toEntity(autorDto);
         autorService.salvar(autor);
-
-        // URL localizado onde foi creado.
-        // http://localhost:8080/autores/id
-        URI location = ServletUriComponentsBuilder
-                .fromCurrentRequest()// Vai pegar essa requisição autal URL
-                .path("/{id}")// "/" precisa do barra para separar url
-                .buildAndExpand(autor.getId())// Parametro
-                .toUri();// Vai transformar obj em URI
-
-        // Antigo
-        //return new ResponseEntity("Autor salvo com sucesso! " + autorDto, HttpStatus.CREATED);
-
-        // Novo
+        URI location = gerarheaderLocation(autor.getId());
         return ResponseEntity.created(location).build();
 
         } catch (RegistroDuplicadoException e) {

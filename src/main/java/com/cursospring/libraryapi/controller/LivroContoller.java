@@ -13,9 +13,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.net.URI;
+
 @RestController
 @RequestMapping("livros")
-public class LivroContoller {
+public class LivroContoller implements GenericController {
 
     private final LivroService livroService;
     private final LivroMapper livroMapper;
@@ -33,11 +35,8 @@ public class LivroContoller {
 
             // Enviar a entidade para o service validar e salvar na base
             Livro livroSalvo = livroService.salvar(livro);
-
-
-            // Criar url para acesso dos dados do livro
-            // Retornar codigo created com header location
-            return ResponseEntity.ok(livroSalvo);
+            var url = gerarheaderLocation(livro.getId());
+            return ResponseEntity.created(url).build();
         } catch (RegistroDuplicadoException e) {
             var erroDTO = ErrorResposta.conflito(e.getMessage());
             return ResponseEntity.status(erroDTO.status()).body(erroDTO);
