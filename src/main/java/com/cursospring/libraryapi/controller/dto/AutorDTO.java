@@ -1,6 +1,5 @@
 package com.cursospring.libraryapi.controller.dto;
 
-import com.cursospring.libraryapi.model.Autor;
 import jakarta.persistence.Id;
 import jakarta.validation.constraints.*;
 
@@ -17,7 +16,7 @@ import java.util.UUID;
 //  Record só tem get class imutavel.
 // Representacao do contrato.
 // Camadada Represatacional.
-public record AutorDto(
+public record AutorDTO(
 
         @Id
         UUID id,

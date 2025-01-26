@@ -1,22 +1,15 @@
 package com.cursospring.libraryapi.controller;
 
-import com.cursospring.libraryapi.controller.dto.AutorDto;
-import com.cursospring.libraryapi.controller.dto.ErrorResposta;
+import com.cursospring.libraryapi.controller.dto.AutorDTO;
 import com.cursospring.libraryapi.controller.mappers.AutorMapper;
-import com.cursospring.libraryapi.exceptions.OperacaoNaoPermitidaException;
-import com.cursospring.libraryapi.exceptions.RegistroDuplicadoException;
 import com.cursospring.libraryapi.model.Autor;
 import com.cursospring.libraryapi.service.AutorService;
 import jakarta.validation.Valid;
-import jakarta.websocket.server.PathParam;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -47,7 +40,7 @@ public class AutorController implements GenericController{
      */
     @PostMapping// Atalho, não precisar colocar ação salvar
     // @RequestMapping(method = RequestMethod.POST)// Antigo
-    public ResponseEntity<Void> salvar(@RequestBody @Valid AutorDto autorDto){
+    public ResponseEntity<Void> salvar(@RequestBody @Valid AutorDTO autorDto){
         Autor autor = autorMapper.toEntity(autorDto);
         autorService.salvar(autor);
         URI location = gerarheaderLocation(autor.getId());
@@ -55,13 +48,13 @@ public class AutorController implements GenericController{
     }
 
     @GetMapping("{id}")
-    public ResponseEntity<AutorDto> obterDetalhes(@PathVariable("id") String id){
+    public ResponseEntity<AutorDTO> obterDetalhes(@PathVariable("id") String id){
         var idAutor = UUID.fromString(id);
 
         return autorService
                 .obterPorId(idAutor)
                 .map(autor -> {
-                        AutorDto autorDto = autorMapper.toDTO(autor);
+                        AutorDTO autorDto = autorMapper.toDTO(autor);
                         return ResponseEntity.ok(autorDto);
                 }).orElseGet( () -> ResponseEntity.notFound().build());
     }
@@ -89,7 +82,7 @@ public class AutorController implements GenericController{
      */
     //@GetMapping("/pesquisar")// não posso dois mapeamentos GET sejam repetidos
     @GetMapping
-    public ResponseEntity<List<AutorDto>> pesquisar(
+    public ResponseEntity<List<AutorDTO>> pesquisar(
             @RequestParam(value = "nome", required = false) String nome,
             @RequestParam(value = "nacionalidade", required = false) String nacionalidade){
         System.out.println("Nome: " + nome + " Nacionalidade: " + nacionalidade);
@@ -97,7 +90,7 @@ public class AutorController implements GenericController{
         List<Autor> resultado = autorService.pesquisaByExample(nome, nacionalidade);
 
         // Transforma lista para DTO
-        List<AutorDto> lista = resultado
+        List<AutorDTO> lista = resultado
                 .stream()
                 .map(autorMapper::toDTO)
                 .collect(Collectors.toList());
@@ -106,7 +99,7 @@ public class AutorController implements GenericController{
 
     @PutMapping("{id}")
     public  ResponseEntity<Void> atualizar
-            (@PathVariable("id") String id, @RequestBody @Valid AutorDto autorDto){
+            (@PathVariable("id") String id, @RequestBody @Valid AutorDTO autorDto){
         var idAutor = UUID.fromString(id);
 
         Optional<Autor> autorOptional = autorService.obterPorId(idAutor);

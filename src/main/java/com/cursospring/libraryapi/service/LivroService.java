@@ -13,6 +13,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import java.util.Optional;
+import java.util.UUID;
+
 @Service
 @RequestMapping("livros")
 public class LivroService {
@@ -25,5 +28,9 @@ public class LivroService {
 
     public Livro salvar(Livro livro) {
         return  livroRepository.save(livro);
+    }
+
+    public Optional<Livro> obterPorId(UUID id){
+        return livroRepository.findById(id);
     }
 }

@@ -2,18 +2,17 @@ package com.cursospring.libraryapi.controller;
 
 import com.cursospring.libraryapi.controller.dto.CadastroLivroDTO;
 import com.cursospring.libraryapi.controller.dto.ErrorResposta;
+import com.cursospring.libraryapi.controller.dto.ResultadoPesquisaLivroDTO;
 import com.cursospring.libraryapi.controller.mappers.LivroMapper;
 import com.cursospring.libraryapi.exceptions.RegistroDuplicadoException;
 import com.cursospring.libraryapi.model.Livro;
 import com.cursospring.libraryapi.service.LivroService;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("livros")
@@ -36,5 +35,14 @@ public class LivroContoller implements GenericController {
         Livro livroSalvo = livroService.salvar(livro);
         var url = gerarheaderLocation(livro.getId());
         return ResponseEntity.created(url).build();
+    }
+
+    @GetMapping("{id}")
+    public ResponseEntity<ResultadoPesquisaLivroDTO> obterDetalhes(@PathVariable("id") String id){
+        return livroService.obterPorId(UUID.fromString(id))
+                .map(livro -> {
+                    var dto = livroMapper.toDTO(livro);
+                    return ResponseEntity.ok(dto);
+                }).orElseGet( ()-> ResponseEntity.notFound().build() );
     }
 }
