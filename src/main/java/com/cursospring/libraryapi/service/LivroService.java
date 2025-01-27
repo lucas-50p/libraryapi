@@ -46,10 +46,19 @@ public class LivroService {
     }
 
     public List<Livro> pesquisa(String isbn,
-                                String nomeAutor
-                                ,String titulo
-                                ,GeneroLivro genero,
+                                String titulo,
+                                String nomeAutor,
+                                GeneroLivro genero,
                                 Integer anoPublicacao){
+
+        boolean temFiltro = isbn != null ||
+                titulo != null ||
+                genero != null ||
+                anoPublicacao != null;
+
+        if(!temFiltro){
+            throw new IllegalArgumentException("Pelo menos um filtro deve ser informado.");
+        }
 
         // select * from livro where 0 = 0
         Specification<Livro> speces = Specification.where((root, query, cb) -> cb.conjunction());
@@ -60,13 +69,15 @@ public class LivroService {
         }
 
         if(titulo != null){
-            // query = query and isbn = : isbn
             speces = speces.and(tituloLike(titulo));
         }
 
         if(genero != null){
-            // query = query and isbn = : isbn
             speces = speces.and(generoEqual(genero));
+        }
+
+        if(anoPublicacao != null){
+            speces = speces.and(anoPublicacao(anoPublicacao));
         }
 
         return livroRepository.findAll();
