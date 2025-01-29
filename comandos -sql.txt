@@ -45,7 +45,7 @@ create table livro (
     preco numeric(18,2),
     data_cadastro timestamp,
     data_atualizacao timestamp,
-    id_usuario uuid
+    id_usuario uuid,
     id_autor uuid not null references autor(id),
     constraint chk_genero check (
         genero in ('ACAO', 'AVENTURA', 'COMEDIA', 'DRAMA', 'ROMANCE', 'TEROR',

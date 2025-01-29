@@ -10,7 +10,7 @@ public interface GenericController {
     default URI gerarheaderLocation(UUID id){
         return ServletUriComponentsBuilder
                 .fromCurrentRequest()
-                .path("/id")
+                .path("/{id}")
                 .buildAndExpand(id)
                 .toUri();
     }

@@ -12,7 +12,7 @@ import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Entity
-@Table(name = "livro")
+@Table(name = "livro", schema = "public")
 @EntityListeners(AuditingEntityListener.class)// Observa se tem essa anotações @CreatedBy @LastModifiedDate/Escuta a operação toda vez que fizer nessa entidade
 //@Data// Getter e set/ toString / EqualsAndHashCode / RequiredArgsConstructor
 public class Livro {
@@ -44,7 +44,7 @@ public class Livro {
     // Essa operação serve para persistir
     //@ManyToOne(cascade = CascadeType.ALL)// Muitos Livros para um autor
     @ManyToOne
-    @JoinColumn(name = "id_autor")
+    @JoinColumn(name = "id_autor", nullable = false)
     private Autor autor;
 
     @CreatedDate// Cria automaticamente as datas

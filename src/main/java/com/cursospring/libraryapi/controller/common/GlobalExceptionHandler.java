@@ -4,6 +4,7 @@ import com.cursospring.libraryapi.controller.dto.ErrorCampo;
 import com.cursospring.libraryapi.controller.dto.ErrorResposta;
 import com.cursospring.libraryapi.exceptions.OperacaoNaoPermitidaException;
 import com.cursospring.libraryapi.exceptions.RegistroDuplicadoException;
+import org.hibernate.validator.internal.util.logging.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -13,10 +14,13 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import javax.management.OperationsException;
 import java.util.List;
+import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 @RestControllerAdvice// Vai capturar as exceptions
 public class GlobalExceptionHandler {
+
+//    private static final Logger logger = LoggerFactory.getLogger(GlobalExceptionHandler.class);
 
     @ExceptionHandler(MethodArgumentNotValidException.class)//Ele capturar o erro
     @ResponseStatus(HttpStatus.UNPROCESSABLE_ENTITY)// FIXO
@@ -52,6 +56,5 @@ public class GlobalExceptionHandler {
               HttpStatus.INTERNAL_SERVER_ERROR.value(),
               "Ocorreu um erro inseperado. Contado Adm",
               List.of());
-
     }
 }

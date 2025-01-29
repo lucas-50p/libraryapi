@@ -54,6 +54,7 @@ public class LivroService {
         boolean temFiltro = isbn != null ||
                 titulo != null ||
                 genero != null ||
+                nomeAutor != null ||
                 anoPublicacao != null;
 
         if(!temFiltro){
@@ -80,6 +81,20 @@ public class LivroService {
             speces = speces.and(anoPublicacao(anoPublicacao));
         }
 
-        return livroRepository.findAll();
+        if(nomeAutor != null){
+            speces = speces.and(nomeAutorLike(nomeAutor));
+        }
+
+        System.out.println("Query: " + speces);
+        return livroRepository.findAll(speces);
+    }
+
+    public void atualizar(Livro livro) {
+
+        if(livro.getId() == null || !livroRepository.existsById(livro.getId())){
+            throw new IllegalArgumentException("Para atualizar, é necessario que o livro já esteja salvo!");
+        }
+        livroRepository.save(livro);
+
     }
 }
