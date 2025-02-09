@@ -7,6 +7,7 @@ import com.cursospring.libraryapi.model.GeneroLivro;
 import com.cursospring.libraryapi.model.Livro;
 import com.cursospring.libraryapi.repository.LivroRepository;
 import com.cursospring.libraryapi.repository.specs.LivroSpeces;
+import com.cursospring.libraryapi.validador.LivroValidator;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.jpa.domain.Specification;
@@ -28,12 +29,17 @@ import static com.cursospring.libraryapi.repository.specs.LivroSpeces.*;
 public class LivroService {
 
     private final LivroRepository livroRepository;
+    private final LivroValidator livroValidator;
 
-    public LivroService(LivroRepository livroRepository) {
+    public LivroService(LivroRepository livroRepository, LivroValidator livroValidator) {
         this.livroRepository = livroRepository;
+        this.livroValidator = livroValidator;
     }
 
     public Livro salvar(Livro livro) {
+
+        // Validar
+        livroValidator.validar(livro);
         return  livroRepository.save(livro);
     }
 
@@ -94,6 +100,9 @@ public class LivroService {
         if(livro.getId() == null || !livroRepository.existsById(livro.getId())){
             throw new IllegalArgumentException("Para atualizar, é necessario que o livro já esteja salvo!");
         }
+
+        // Antes atualizr validar
+        livroValidator.validar(livro);
         livroRepository.save(livro);
 
     }
