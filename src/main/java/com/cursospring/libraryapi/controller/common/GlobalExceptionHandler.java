@@ -2,6 +2,7 @@ package com.cursospring.libraryapi.controller.common;
 
 import com.cursospring.libraryapi.controller.dto.ErrorCampo;
 import com.cursospring.libraryapi.controller.dto.ErrorResposta;
+import com.cursospring.libraryapi.exceptions.CampoInvalidoException;
 import com.cursospring.libraryapi.exceptions.OperacaoNaoPermitidaException;
 import com.cursospring.libraryapi.exceptions.RegistroDuplicadoException;
 import org.hibernate.validator.internal.util.logging.LoggerFactory;
@@ -35,6 +36,15 @@ public class GlobalExceptionHandler {
                 "Erro de validação",
                 listaErros
         );
+    }
+
+    @ExceptionHandler(CampoInvalidoException.class)//Ele capturar o erro
+    @ResponseStatus(HttpStatus.UNPROCESSABLE_ENTITY)// FIXO
+    public ErrorResposta handleCampoInvalidoException(CampoInvalidoException e){
+        return new ErrorResposta(
+                HttpStatus.UNPROCESSABLE_ENTITY.value(),
+                "Erro de validação",
+                List.of(new ErrorCampo(e.getCampo(), e.getMessage())));
     }
 
     @ExceptionHandler(RegistroDuplicadoException.class)
