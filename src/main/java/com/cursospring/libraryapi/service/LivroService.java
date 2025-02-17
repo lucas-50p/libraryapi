@@ -10,6 +10,9 @@ import com.cursospring.libraryapi.repository.specs.LivroSpeces;
 import com.cursospring.libraryapi.validador.LivroValidator;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -51,11 +54,13 @@ public class LivroService {
         livroRepository.delete(livro);
     }
 
-    public List<Livro> pesquisa(String isbn,
+    public Page<Livro> pesquisa(String isbn,
                                 String titulo,
                                 String nomeAutor,
                                 GeneroLivro genero,
-                                Integer anoPublicacao){
+                                Integer anoPublicacao,
+                                Integer pagina,
+                                Integer tamanhoPagina){
 
         boolean temFiltro = isbn != null ||
                 titulo != null ||
@@ -63,8 +68,13 @@ public class LivroService {
                 nomeAutor != null ||
                 anoPublicacao != null;
 
-        if(!temFiltro){
-            throw new IllegalArgumentException("Pelo menos um filtro deve ser informado.");
+//        if(!temFiltro){
+//            throw new IllegalArgumentException("Pelo menos um filtro deve ser informado.");
+//        }
+
+        // Retorna uma página vazia se não houver filtros
+        if (!temFiltro) {
+            return Page.empty(); // Retorna uma página vazia
         }
 
         // select * from livro where 0 = 0
@@ -91,8 +101,13 @@ public class LivroService {
             speces = speces.and(nomeAutorLike(nomeAutor));
         }
 
-        System.out.println("Query: " + speces);
-        return livroRepository.findAll(speces);
+//        Pageable pageRequest = PageRequest.of(pagina, tamanhoPagina);
+
+        // Certifica-se que a página não será negativa e que o tamanho da página seja válido
+        Pageable pageRequest = PageRequest.of(Math.max(pagina, 0), Math.max(tamanhoPagina, 1));
+
+        //System.out.println("Query: " + speces);
+        return livroRepository.findAll(speces, pageRequest);
     }
 
     public void atualizar(Livro livro) {

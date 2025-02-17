@@ -1,22 +1,18 @@
 package com.cursospring.libraryapi.controller;
 
 import com.cursospring.libraryapi.controller.dto.CadastroLivroDTO;
-import com.cursospring.libraryapi.controller.dto.ErrorResposta;
 import com.cursospring.libraryapi.controller.dto.ResultadoPesquisaLivroDTO;
 import com.cursospring.libraryapi.controller.mappers.LivroMapper;
-import com.cursospring.libraryapi.exceptions.RegistroDuplicadoException;
 import com.cursospring.libraryapi.model.GeneroLivro;
 import com.cursospring.libraryapi.model.Livro;
 import com.cursospring.libraryapi.service.LivroService;
 import jakarta.validation.Valid;
+import org.springframework.data.domain.Page;
+import org.springframework.data.web.PagedResourcesAssembler;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.net.URI;
-import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("livros")
@@ -60,7 +56,7 @@ public class LivroContoller implements GenericController {
     }
 
     @GetMapping
-    public ResponseEntity<List<ResultadoPesquisaLivroDTO>> pesquisar (
+    public ResponseEntity<Page<ResultadoPesquisaLivroDTO>> pesquisar (
             @RequestParam(value = "isbn", required = false)
             String isbn,
             @RequestParam(value = "titulo", required = false)
@@ -70,15 +66,57 @@ public class LivroContoller implements GenericController {
             @RequestParam(value = "genero", required = false)
             GeneroLivro genero,
             @RequestParam(value = "ano-publicacao", required = false)
-            Integer anoPublicacao
+            Integer anoPublicacao,
+            @RequestParam(value = "pagina", defaultValue = "0")
+            Integer pagina,
+            @RequestParam(value = "tamanho-pagina", defaultValue = "20")
+            Integer tamanhoPagina,
+            PagedResourcesAssembler<ResultadoPesquisaLivroDTO> assembler
     ){
-        var resultado = livroService.pesquisa(isbn, titulo, nomeAutor, genero, anoPublicacao);
-        var lista = resultado
-                .stream()
-                .map(livroMapper::toDTO)
-                .collect(Collectors.toList());
-        return  ResponseEntity.ok(lista);
+        Page <Livro> paginaResultado = livroService.pesquisa(
+                isbn, titulo, nomeAutor, genero, anoPublicacao, pagina, tamanhoPagina);
+
+        Page <ResultadoPesquisaLivroDTO> resultado = paginaResultado.map(livroMapper::toDTO);
+
+        // Retornando a resposta paginada
+        return ResponseEntity.ok(resultado);
     }
+
+//    @GetMapping
+//    public ResponseEntity<Page<ResultadoPesquisaLivroDTO>> pesquisar(
+//            @RequestParam(value = "isbn", required = false) String isbn,
+//            @RequestParam(value = "titulo", required = false) String titulo,
+//            @RequestParam(value = "nome-autor", required = false) String nomeAutor,
+//            @RequestParam(value = "genero", required = false) GeneroLivro genero,
+//            @RequestParam(value = "ano-publicacao", required = false) Integer anoPublicacao,
+//            @RequestParam(value = "pagina", defaultValue = "0") Integer pagina,
+//            @RequestParam(value = "tamanho-pagina", defaultValue = "20") Integer tamanhoPagina) {
+//
+//        try {
+//            // Logando os parâmetros recebidos
+//            System.out.println("Parâmetros: isbn=" + isbn + ", titulo=" + titulo + ", nomeAutor=" + nomeAutor +
+//                    ", genero=" + genero + ", anoPublicacao=" + anoPublicacao + ", pagina=" + pagina +
+//                    ", tamanho-pagina=" + tamanhoPagina);
+//
+//            // Obter a página de livros a partir do serviço
+//            Page<Livro> paginaResultado = livroService.pesquisa(
+//                    isbn, titulo, nomeAutor, genero, anoPublicacao, pagina, tamanhoPagina);
+//
+//            // Logando o resultado
+//            System.out.println("Resultado da pesquisa: " + paginaResultado.getContent());
+//
+//            // Converter a página de livros para DTOs (ResultadoPesquisaLivroDTO)
+//            Page<ResultadoPesquisaLivroDTO> resultado = paginaResultado.map(livroMapper::toDTO);
+//
+//            // Retornar a resposta paginada com os DTOs
+//            return ResponseEntity.ok(resultado);
+//        } catch (Exception e) {
+//            // Logando a exceção
+//            System.err.println("Erro ao processar a pesquisa: " + e.getMessage());
+//            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+//                    .body(null); // Você pode também retornar uma mensagem de erro específica
+//        }
+//    }
 
     @PutMapping("{id}")
     public ResponseEntity<Object> atualizar(
