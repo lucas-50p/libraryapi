@@ -2,6 +2,7 @@ package com.cursospring.libraryapi.config.Database;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -23,11 +24,20 @@ public class SecurityConfiguration {
         return httpSecurity
                 .csrf(AbstractHttpConfigurer::disable)
                 .formLogin(configurer -> {
-                    configurer.loginPage("/login").permitAll();
+                    configurer.loginPage("/login");
                 })
                 .httpBasic(Customizer.withDefaults())
-                .authorizeHttpRequests(authorize ->
-                {authorize.anyRequest().authenticated();})
+                .authorizeHttpRequests(authorize -> {
+                    authorize.requestMatchers("/login/**").permitAll();
+//                    authorize.requestMatchers(HttpMethod.POST, "/autores/**").hasAuthority("CADASTRAR_AUTOR");// Permição de executar uma operação
+//                    authorize.requestMatchers(HttpMethod.POST, "/autores/**").hasRole("ADMIN");// HashRole e grupo de usuario
+//                    authorize.requestMatchers(HttpMethod.DELETE,"/autores/**").hasRole("ADMIN");// Vai permitir só autores
+//                    authorize.requestMatchers(HttpMethod.PUT,"/autores/**").hasRole("ADMIN");// Vai permitir só autores
+//                    authorize.requestMatchers(HttpMethod.GET,  "/autores/**").hasAnyRole("USER","ADMIN");
+                    authorize.requestMatchers("/autores/**").hasRole("ADMIN");
+                    authorize.requestMatchers("/livros/**").hasAnyRole("USER","ADMIN");
+                    authorize.anyRequest().authenticated();
+                })
                 .build();
     }
 
