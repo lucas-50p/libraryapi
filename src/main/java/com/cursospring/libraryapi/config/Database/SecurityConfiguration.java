@@ -29,6 +29,7 @@ public class SecurityConfiguration {
                 .httpBasic(Customizer.withDefaults())
                 .authorizeHttpRequests(authorize -> {
                     authorize.requestMatchers("/login/**").permitAll();
+                    authorize.requestMatchers(HttpMethod.POST,"/usuarios/**").permitAll();// Qualque usuario
 //                    authorize.requestMatchers(HttpMethod.POST, "/autores/**").hasAuthority("CADASTRAR_AUTOR");// Permição de executar uma operação
 //                    authorize.requestMatchers(HttpMethod.POST, "/autores/**").hasRole("ADMIN");// HashRole e grupo de usuario
 //                    authorize.requestMatchers(HttpMethod.DELETE,"/autores/**").hasRole("ADMIN");// Vai permitir só autores
