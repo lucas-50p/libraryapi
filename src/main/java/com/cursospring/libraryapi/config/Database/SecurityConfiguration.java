@@ -1,5 +1,7 @@
 package com.cursospring.libraryapi.config.Database;
 
+import com.cursospring.libraryapi.security.CustomUserDetailsService;
+import com.cursospring.libraryapi.service.UsuarioService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -48,20 +50,22 @@ public class SecurityConfiguration {
     }
 
     @Bean
-    public UserDetailsService userDetailsService(PasswordEncoder encoder){
+    public UserDetailsService userDetailsService(UsuarioService usuarioService){
 
-        UserDetails user1 = User.builder()
-                .username("usuario")
-                .password(encoder.encode("123"))
-                .roles("USER")
-                .build();
+//        UserDetails user1 = User.builder()
+//                .username("usuario")
+//                .password(encoder.encode("123"))
+//                .roles("USER")
+//                .build();
+//
+//        UserDetails user2 = User.builder()
+//                .username("admin")
+//                .password(encoder.encode("321"))
+//                .roles("ADMIN")
+//                .build();
+//
+//        return new InMemoryUserDetailsManager(user1, user2);
 
-        UserDetails user2 = User.builder()
-                .username("admin")
-                .password(encoder.encode("321"))
-                .roles("ADMIN")
-                .build();
-
-        return new InMemoryUserDetailsManager(user1, user2);
+        return new CustomUserDetailsService(usuarioService);
     }
 }
