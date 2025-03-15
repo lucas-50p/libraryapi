@@ -49,8 +49,9 @@ public class Autor {
     @Column(name = "data_atualizacao")
     private LocalDateTime dataAtualizacao;
 
-    @Column(name = "id_usuario")
-    private UUID idUsuario;
+    @ManyToOne
+    @JoinColumn(name = "id_usuario")
+    private Usuario usuario;
 
 //    @OneToMany(mappedBy = "autor", cascade = CascadeType.ALL)
 //    private List<Livro> livros;
@@ -111,15 +112,15 @@ public class Autor {
         this.dataAtualizacao = dataAtualizacao;
     }
 
-    public UUID getIdUsuario() {
-        return idUsuario;
+    public Usuario getUsuario() {
+        return usuario;
     }
 
-    public void setIdUsuario(UUID idUsuario) {
-        this.idUsuario = idUsuario;
+    public void setUsuario(Usuario usuario) {
+        this.usuario = usuario;
     }
 
-//    @Deprecated
+    //    @Deprecated
 //    public Autor() {
 //        // Para uso do framework
 //    }

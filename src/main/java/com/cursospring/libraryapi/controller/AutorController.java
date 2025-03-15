@@ -3,10 +3,17 @@ package com.cursospring.libraryapi.controller;
 import com.cursospring.libraryapi.controller.dto.AutorDTO;
 import com.cursospring.libraryapi.controller.mappers.AutorMapper;
 import com.cursospring.libraryapi.model.Autor;
+import com.cursospring.libraryapi.model.Usuario;
+import com.cursospring.libraryapi.security.SecurityService;
 import com.cursospring.libraryapi.service.AutorService;
+import com.cursospring.libraryapi.service.UsuarioService;
 import jakarta.validation.Valid;
+import org.springframework.boot.autoconfigure.neo4j.Neo4jProperties;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;

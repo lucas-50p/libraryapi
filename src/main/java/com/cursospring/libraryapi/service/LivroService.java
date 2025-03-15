@@ -5,8 +5,10 @@ import com.cursospring.libraryapi.controller.dto.ErrorResposta;
 import com.cursospring.libraryapi.exceptions.RegistroDuplicadoException;
 import com.cursospring.libraryapi.model.GeneroLivro;
 import com.cursospring.libraryapi.model.Livro;
+import com.cursospring.libraryapi.model.Usuario;
 import com.cursospring.libraryapi.repository.LivroRepository;
 import com.cursospring.libraryapi.repository.specs.LivroSpeces;
+import com.cursospring.libraryapi.security.SecurityService;
 import com.cursospring.libraryapi.validador.LivroValidator;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -33,16 +35,20 @@ public class LivroService {
 
     private final LivroRepository livroRepository;
     private final LivroValidator livroValidator;
+    private final SecurityService securityService;
 
-    public LivroService(LivroRepository livroRepository, LivroValidator livroValidator) {
+    public LivroService(LivroRepository livroRepository, LivroValidator livroValidator, SecurityService securityService) {
         this.livroRepository = livroRepository;
         this.livroValidator = livroValidator;
+        this.securityService = securityService;
     }
 
     public Livro salvar(Livro livro) {
 
         // Validar
         livroValidator.validar(livro);
+        Usuario usuario = securityService.obterUsuarioLogado();
+        livro.setUsuario(usuario);
         return  livroRepository.save(livro);
     }
 
