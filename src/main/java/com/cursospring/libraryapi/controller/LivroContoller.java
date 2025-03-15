@@ -10,6 +10,7 @@ import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
 import org.springframework.data.web.PagedResourcesAssembler;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.UUID;
@@ -27,6 +28,7 @@ public class LivroContoller implements GenericController {
     }
 
     @PostMapping
+    @PreAuthorize("hasAnyRole('OPERADOR', 'GERENTE')")
     public ResponseEntity<Void> salvar(@RequestBody @Valid CadastroLivroDTO dto) {
         // Mapear dto para entidade
         Livro livro = livroMapper.toEntity(dto);
@@ -38,6 +40,7 @@ public class LivroContoller implements GenericController {
     }
 
     @GetMapping("{id}")
+    @PreAuthorize("hasAnyRole('OPERADOR', 'GERENTE')")
     public ResponseEntity<ResultadoPesquisaLivroDTO> obterDetalhes(@PathVariable("id") String id){
         return livroService.obterPorId(UUID.fromString(id))
                 .map(livro -> {
@@ -47,6 +50,7 @@ public class LivroContoller implements GenericController {
     }
 
     @DeleteMapping("{id}")
+    @PreAuthorize("hasAnyRole('OPERADOR', 'GERENTE')")
     public ResponseEntity<Object> deletar(@PathVariable("id") String id){
         return livroService.obterPorId(UUID.fromString(id))
                 .map(livro -> {
@@ -56,6 +60,7 @@ public class LivroContoller implements GenericController {
     }
 
     @GetMapping
+    @PreAuthorize("hasAnyRole('OPERADOR', 'GERENTE')")
     public ResponseEntity<Page<ResultadoPesquisaLivroDTO>> pesquisar (
             @RequestParam(value = "isbn", required = false)
             String isbn,
@@ -82,43 +87,8 @@ public class LivroContoller implements GenericController {
         return ResponseEntity.ok(resultado);
     }
 
-//    @GetMapping
-//    public ResponseEntity<Page<ResultadoPesquisaLivroDTO>> pesquisar(
-//            @RequestParam(value = "isbn", required = false) String isbn,
-//            @RequestParam(value = "titulo", required = false) String titulo,
-//            @RequestParam(value = "nome-autor", required = false) String nomeAutor,
-//            @RequestParam(value = "genero", required = false) GeneroLivro genero,
-//            @RequestParam(value = "ano-publicacao", required = false) Integer anoPublicacao,
-//            @RequestParam(value = "pagina", defaultValue = "0") Integer pagina,
-//            @RequestParam(value = "tamanho-pagina", defaultValue = "20") Integer tamanhoPagina) {
-//
-//        try {
-//            // Logando os parâmetros recebidos
-//            System.out.println("Parâmetros: isbn=" + isbn + ", titulo=" + titulo + ", nomeAutor=" + nomeAutor +
-//                    ", genero=" + genero + ", anoPublicacao=" + anoPublicacao + ", pagina=" + pagina +
-//                    ", tamanho-pagina=" + tamanhoPagina);
-//
-//            // Obter a página de livros a partir do serviço
-//            Page<Livro> paginaResultado = livroService.pesquisa(
-//                    isbn, titulo, nomeAutor, genero, anoPublicacao, pagina, tamanhoPagina);
-//
-//            // Logando o resultado
-//            System.out.println("Resultado da pesquisa: " + paginaResultado.getContent());
-//
-//            // Converter a página de livros para DTOs (ResultadoPesquisaLivroDTO)
-//            Page<ResultadoPesquisaLivroDTO> resultado = paginaResultado.map(livroMapper::toDTO);
-//
-//            // Retornar a resposta paginada com os DTOs
-//            return ResponseEntity.ok(resultado);
-//        } catch (Exception e) {
-//            // Logando a exceção
-//            System.err.println("Erro ao processar a pesquisa: " + e.getMessage());
-//            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-//                    .body(null); // Você pode também retornar uma mensagem de erro específica
-//        }
-//    }
-
     @PutMapping("{id}")
+    @PreAuthorize("hasAnyRole('OPERADOR', 'GERENTE')")
     public ResponseEntity<Object> atualizar(
             @PathVariable("id") String id, @RequestBody @Valid CadastroLivroDTO dto) {
 

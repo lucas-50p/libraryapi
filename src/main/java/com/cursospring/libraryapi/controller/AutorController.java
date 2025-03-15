@@ -6,6 +6,7 @@ import com.cursospring.libraryapi.model.Autor;
 import com.cursospring.libraryapi.service.AutorService;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
@@ -39,6 +40,7 @@ public class AutorController implements GenericController{
      * @return
      */
     @PostMapping// Atalho, não precisar colocar ação salvar
+    @PreAuthorize("hasRole('GERENTE')")
     // @RequestMapping(method = RequestMethod.POST)// Antigo
     public ResponseEntity<Void> salvar(@RequestBody @Valid AutorDTO autorDto){
         Autor autor = autorMapper.toEntity(autorDto);
@@ -48,6 +50,7 @@ public class AutorController implements GenericController{
     }
 
     @GetMapping("{id}")
+    @PreAuthorize("hasAnyRole('OPERADOR', 'GERENTE')")
     public ResponseEntity<AutorDTO> obterDetalhes(@PathVariable("id") String id){
         var idAutor = UUID.fromString(id);
 
@@ -61,6 +64,7 @@ public class AutorController implements GenericController{
 
     // Indompotente
     @DeleteMapping("{id}")
+    @PreAuthorize("hasRole('GERENTE')")
     public ResponseEntity<Void> deletar(@PathVariable("id") String id){
         var idAutor = UUID.fromString(id);
         Optional<Autor> autorOptional = autorService.obterPorId(idAutor);
@@ -82,6 +86,7 @@ public class AutorController implements GenericController{
      */
     //@GetMapping("/pesquisar")// não posso dois mapeamentos GET sejam repetidos
     @GetMapping
+    @PreAuthorize("hasAnyRole('OPERADOR', 'GERENTE')")
     public ResponseEntity<List<AutorDTO>> pesquisar(
             @RequestParam(value = "nome", required = false) String nome,
             @RequestParam(value = "nacionalidade", required = false) String nacionalidade){
@@ -98,6 +103,7 @@ public class AutorController implements GenericController{
     }
 
     @PutMapping("{id}")
+    @PreAuthorize("hasRole('GERENTE')")
     public  ResponseEntity<Void> atualizar
             (@PathVariable("id") String id, @RequestBody @Valid AutorDTO autorDto){
         var idAutor = UUID.fromString(id);
