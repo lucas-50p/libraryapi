@@ -78,3 +78,26 @@ update livro set titulo = 'O Dective' where id = 'Colocar Id';
 
 select * from autor
 select * from livro
+
+# Uusario
+select * from usuario
+select * from livro
+
+DELETE FROM usuario
+
+DELETE FROM livro WHERE id_usuario = '07932c41-ac7a-4d2c-aa3b-afd2f9937a46';
+
+DELETE FROM autor WHERE id_usuario = '37342f03-d48c-4422-9118-151252bf11f2';
+
+
+
+drop table usuario;
+alter table usuario add column email varchar(150) not null
+
+create table usuario(
+    id uuid not null primary key,
+    login varchar(20) not null unique,
+    senha varchar(300) not null,
+	email varchar(150) not null
+    roles varchar[]
+);
