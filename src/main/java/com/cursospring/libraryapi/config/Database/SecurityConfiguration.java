@@ -65,7 +65,7 @@ public class SecurityConfiguration {
         var authoritiesConvert = new JwtGrantedAuthoritiesConverter();
         authoritiesConvert.setAuthorityPrefix("");
 
-        var convert = jwtAuthenticationConverter();
+        var convert = new JwtAuthenticationConverter();
         convert.setJwtGrantedAuthoritiesConverter(authoritiesConvert);
 
         return convert;
