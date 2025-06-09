@@ -40,7 +40,7 @@ public class CustomRegisteredClientRepository implements RegisteredClientReposit
 
         return RegisteredClient
                 .withId(client.getId().toString())
-                .clientId(client.getClientSecret())
+                .clientId(client.getClientId())
                 .clientSecret(client.getClientSecret())
                 .redirectUri(client.getRedirectURI())
                 .scope(client.getScope())
@@ -52,4 +52,7 @@ public class CustomRegisteredClientRepository implements RegisteredClientReposit
                 .clientSettings(clientSettings)
                 .build();
     }
+
+    // TODO criar manual aula 152. Utilizando Refresh Tokens para renovar sessão
+    // Fazer no Postman
 }
