@@ -1,6 +1,7 @@
 package com.cursospring.libraryapi.config.Database;
 
 import com.cursospring.libraryapi.security.CustomUserDetailsService;
+import com.cursospring.libraryapi.security.JwtCustomAuthenticationFilter;
 import com.cursospring.libraryapi.security.LoginSocialSucessHandler;
 import com.cursospring.libraryapi.service.UsuarioService;
 import org.springframework.context.annotation.Bean;
@@ -20,6 +21,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationConverter;
 import org.springframework.security.oauth2.server.resource.authentication.JwtGrantedAuthoritiesConverter;
+import org.springframework.security.oauth2.server.resource.web.authentication.BearerTokenAuthenticationFilter;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 
@@ -29,7 +31,7 @@ import org.springframework.security.web.SecurityFilterChain;
 public class SecurityConfiguration {
 
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity, LoginSocialSucessHandler loginSocialSucessHandler) throws  Exception{
+    public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity, LoginSocialSucessHandler loginSocialSucessHandler, JwtCustomAuthenticationFilter jwtCustomAuthenticationFilter) throws  Exception{
         return httpSecurity
                 .csrf(AbstractHttpConfigurer::disable)
                 .httpBasic(Customizer.withDefaults())
@@ -49,6 +51,7 @@ public class SecurityConfiguration {
                                         .redirectionEndpoint(redirectionEndpointConfig ->
                                                 redirectionEndpointConfig.baseUri("/oauth2/code/*")))
                 .oauth2ResourceServer(oauth2RS -> oauth2RS.jwt(Customizer.withDefaults()))
+                .addFilterAfter(jwtCustomAuthenticationFilter, BearerTokenAuthenticationFilter.class)
                 .build();
     }
 
