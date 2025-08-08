@@ -35,7 +35,7 @@ public class SecurityConfiguration {
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity, LoginSocialSucessHandler loginSocialSucessHandler, JwtCustomAuthenticationFilter jwtCustomAuthenticationFilter) throws  Exception{
         return httpSecurity
                 .csrf(AbstractHttpConfigurer::disable)
-                .httpBasic(Customizer.withDefaults())
+//                .httpBasic(Customizer.withDefaults())// Vai ser autilizado auth 2
                 .formLogin(configurer ->{
                     configurer.loginPage("/login").permitAll();
                 })
@@ -65,18 +65,6 @@ public class SecurityConfiguration {
                 .addFilterAfter(jwtCustomAuthenticationFilter, BearerTokenAuthenticationFilter.class)
                 .build();
     }
-
-//    @Bean
-//    public WebSecurityCustomizer webSecurityCustomizer(){
-//        return web -> web.ignoring().requestMatchers(
-//                "/v2/api-docs/**",
-//                "/v3/api-docs/**",
-//                "/swagger-resources/**",
-//                "/swagger-ui.html",
-//                "/swagger-ui/**",
-//                "/webjars/**"
-//        );
-//    }
 
     @Bean
     public WebSecurityCustomizer webSecurityCustomizer() {

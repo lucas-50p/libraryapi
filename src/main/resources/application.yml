@@ -24,3 +24,5 @@ spring:
              scope: profile, email
              redirect-uri: "http://localhost:8080/oauth2/code/google"
 
+springdoc:
+  override-with-generic-response: false
