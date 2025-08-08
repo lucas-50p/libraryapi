@@ -11,6 +11,7 @@ import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.core.GrantedAuthorityDefaults;
 import org.springframework.security.core.GrantedAuthority;
@@ -40,7 +41,17 @@ public class SecurityConfiguration {
                 })
 //                .formLogin(Customizer.withDefaults())
                 .authorizeHttpRequests(authorize -> {
-                    authorize.requestMatchers("/login/**").permitAll();
+                    authorize
+                            .requestMatchers(
+                                    "/",
+                                    "/v3/api-docs/**",
+                                    "/swagger-ui/**",
+                                    "/swagger-ui.html",
+                                    "/swagger-resources/**",
+                                    "/webjars/**",
+                                    "/login/**"
+                            ).permitAll();
+//                    authorize.requestMatchers("/login/**").permitAll();
                     authorize.requestMatchers(HttpMethod.POST,"/usuarios/**").permitAll();// Qualque usuario
                     authorize.anyRequest().authenticated();
                 })
@@ -54,6 +65,32 @@ public class SecurityConfiguration {
                 .addFilterAfter(jwtCustomAuthenticationFilter, BearerTokenAuthenticationFilter.class)
                 .build();
     }
+
+//    @Bean
+//    public WebSecurityCustomizer webSecurityCustomizer(){
+//        return web -> web.ignoring().requestMatchers(
+//                "/v2/api-docs/**",
+//                "/v3/api-docs/**",
+//                "/swagger-resources/**",
+//                "/swagger-ui.html",
+//                "/swagger-ui/**",
+//                "/webjars/**"
+//        );
+//    }
+
+    @Bean
+    public WebSecurityCustomizer webSecurityCustomizer() {
+        return (web) -> web.ignoring().requestMatchers(
+                "/v2/api-docs",            // Swagger 2 (caso use)
+                "/v3/api-docs/**",         // OpenAPI 3
+                "/swagger-resources/**",   // Recursos da UI
+                "/swagger-ui.html",        // Página principal
+                "/swagger-ui/**",          // Arquivos estáticos da UI
+                "/webjars/**",             // Dependências JS/CSS
+                "/favicon.ico"             // Ícone do navegador
+        );
+    }
+
 
     // COFIGURA O PREFIXO ROLE
     @Bean

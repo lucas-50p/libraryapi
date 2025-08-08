@@ -27,7 +27,7 @@ public class JwtCustomAuthenticationFilter extends OncePerRequestFilter {
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
-        if(deverCoventer(authentication)){
+        if(shouldConvert(authentication)){
             String login = authentication.getName();
             Usuario usuario = usuarioService.obterPorLogin(login);
             if(usuario != null){
@@ -38,7 +38,7 @@ public class JwtCustomAuthenticationFilter extends OncePerRequestFilter {
         filterChain.doFilter(request, response);
     }
 
-    private boolean deverCoventer(Authentication authentication) {
+    private boolean shouldConvert(Authentication authentication) {
         return  authentication != null && authentication instanceof JwtAuthenticationToken;
     }
 }

@@ -126,11 +126,11 @@ public class AuthorizationServerConfiguration {
                 // Authorization endpoint
                 .authorizationEndpoint("/oauth2/authorize")
                 // Informações do usuario OPEN ID CONNECT
-                .oidcUserInfoEndpoint("oauth2/iserinfo")
+                .oidcUserInfoEndpoint("/oauth2/iserinfo")
                 // Obter a chave publica para verificar a assinatura do token
-                .jwkSetEndpoint("oauth2/jwks")
+                .jwkSetEndpoint("/oauth2/jwks")
                 // logout
-                .oidcLogoutEndpoint("oauth2/logout")
+                .oidcLogoutEndpoint("/oauth2/logout")
                 .build();
     }
 
