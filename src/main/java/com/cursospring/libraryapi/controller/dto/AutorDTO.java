@@ -1,5 +1,6 @@
 package com.cursospring.libraryapi.controller.dto;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.Id;
 import jakarta.validation.constraints.*;
 
@@ -16,6 +17,7 @@ import java.util.UUID;
 //  Record só tem get class imutavel.
 // Representacao do contrato.
 // Camadada Represatacional.
+@Schema(name = "Autor")
 public record AutorDTO(
 
         @Id
@@ -23,15 +25,18 @@ public record AutorDTO(
 
         @NotBlank(message = "Campo obrigatorio")// String não venha nula e nem vazia
         @Size(min = 2, max = 100, message = "Campo fora fo tamanho padrão *") //Seguir como está no banoc
+        @Schema(name = "nome")
         String nome,
 
         @NotNull(message = "Campo obrigatorio *")
         //@Future// Data futura
         @Past // Data passada
+        @Schema(name = "dataNascimento")
         LocalDate dataNascimento,
 
         @NotBlank(message = "* Campo obrigatorio *")
         @Size(min = 2, max = 50, message = "Campo fora fo tamanho padrão *")
+        @Schema(name = "nacionalidade")
         String nacionalidade) {
 
 //    public Autor maperParaAutor(){
